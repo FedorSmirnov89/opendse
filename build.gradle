@@ -36,7 +36,7 @@ subprojects {
     apply plugin: 'eclipse'
     apply plugin: 'jacoco'
     jacoco {
-		toolVersion = "0.8.2"
+		toolVersion = "0.8.5"
 	}
 	
 	eclipse {
@@ -47,8 +47,8 @@ subprojects {
 	
     version = parent.version
 
-    sourceCompatibility = 11
-	targetCompatibility = 11
+    sourceCompatibility = 14
+	targetCompatibility = 14
 	
 	task sourcesJar(type: Jar, dependsOn:classes) {
 		from sourceSets.main.allSource 
