@@ -32,8 +32,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.map.LazyMap;
+
+import com.google.common.base.Function;
 
 import edu.uci.ics.jung.algorithms.cluster.WeakComponentClusterer;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -51,7 +53,7 @@ public class DistanceFlowLayout<V, E> implements Layout<V, E> {
 	private int ox = 100;
 	private int oy = 50;
 
-	protected Map<V, Point2D> locations = LazyMap.decorate(new HashMap<V, Point2D>(), new Transformer<V, Point2D>() {
+	protected Map<V, Point2D> locations = LazyMap.lazyMap(new HashMap<V, Point2D>(), new Transformer<V, Point2D>() {
 		public Point2D transform(V vertex) {
 			return new Point2D.Double();
 		}
@@ -96,7 +98,7 @@ public class DistanceFlowLayout<V, E> implements Layout<V, E> {
 	}
 
 	@Override
-	public void setInitializer(Transformer<V, Point2D> arg0) {
+	public void setInitializer(Function<V, Point2D> arg0) {
 	}
 
 	@Override
@@ -109,13 +111,13 @@ public class DistanceFlowLayout<V, E> implements Layout<V, E> {
 	}
 
 	@Override
-	public Point2D transform(V vertex) {
+	public Point2D apply(V vertex) {
 		return locations.get(vertex);
 	}
 
 	protected void doLayout() {
 		WeakComponentClusterer<V, E> clusterer = new WeakComponentClusterer<V, E>();
-		Set<Set<V>> sets = clusterer.transform(graph);
+		Set<Set<V>> sets = clusterer.apply(graph);
 
 		Set<DirectedGraph<V, E>> graphs = new HashSet<DirectedGraph<V, E>>();
 		for (Set<V> set : sets) {
@@ -190,14 +192,14 @@ public class DistanceFlowLayout<V, E> implements Layout<V, E> {
 			}
 
 			for (V vertex : graph.getVertices()) {
-				xOffset = Math.max(xOffset, (int) transform(vertex).getX());
+				xOffset = Math.max(xOffset, (int) apply(vertex).getX());
 			}
 
 			xOffset += ox;
 		}
 
 		for (V v : graph.getVertices()) {
-			Point2D location = transform(v);
+			Point2D location = apply(v);
 			maxX = Math.max(maxX, (int) location.getX());
 			maxY = Math.max(maxY, (int) location.getY());
 		}

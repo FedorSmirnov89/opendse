@@ -3,7 +3,7 @@ package net.sf.opendse.optimization.io;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 import net.sf.opendse.model.Architecture;
 import net.sf.opendse.model.Attributes;

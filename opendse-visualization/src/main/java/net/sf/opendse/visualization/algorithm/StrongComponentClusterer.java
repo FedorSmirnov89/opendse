@@ -23,13 +23,13 @@ package net.sf.opendse.visualization.algorithm;
 
 import static java.lang.Math.min;
 
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections15.ArrayStack;
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 import edu.uci.ics.jung.graph.Graph;
 
@@ -64,7 +64,7 @@ public class StrongComponentClusterer<V, E> implements Transformer<Graph<V, E>, 
 
 		int index = 0;
 
-		ArrayStack<V> stack = new ArrayStack<V>();
+		ArrayDeque<V> stack = new ArrayDeque<V>();
 		Map<V, Integer> indexMap = new HashMap<V, Integer>();
 		Map<V, Integer> lowlinkMap = new HashMap<V, Integer>();
 		Graph<V, E> graph;

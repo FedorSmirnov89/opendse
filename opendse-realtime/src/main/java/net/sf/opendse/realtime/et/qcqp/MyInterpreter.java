@@ -56,7 +56,7 @@ import net.sf.opendse.realtime.et.qcqp.vars.Vars;
 import net.sf.opendse.visualization.algorithm.BellmanFord;
 import net.sf.opendse.visualization.algorithm.CycleBreakFilter;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 import edu.uci.ics.jung.algorithms.cluster.WeakComponentClusterer;
 
@@ -127,7 +127,7 @@ public class MyInterpreter {
 
 		if (considerPriorities) {
 			WeakComponentClusterer<TimingElement, TimingDependency> clusterer = new WeakComponentClusterer<TimingElement, TimingDependency>();
-			Set<Set<TimingElement>> clusters = clusterer.transform(rtg);
+			Set<Set<TimingElement>> clusters = clusterer.apply(rtg);
 
 			for (Set<TimingElement> cluster : clusters) {
 				TimingGraph clusterGraph = new TimingGraph();

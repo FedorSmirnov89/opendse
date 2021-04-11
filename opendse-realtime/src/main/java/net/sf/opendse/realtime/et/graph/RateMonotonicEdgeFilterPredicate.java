@@ -23,7 +23,7 @@ package net.sf.opendse.realtime.et.graph;
 
 import net.sf.opendse.model.Task;
 
-import org.apache.commons.collections15.Predicate;
+import org.apache.commons.collections4.Predicate;
 
 @Deprecated
 public class RateMonotonicEdgeFilterPredicate implements Predicate<TimingDependency> {

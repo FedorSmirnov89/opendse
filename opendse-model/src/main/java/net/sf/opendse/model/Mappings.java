@@ -29,10 +29,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections15.Bag;
-import org.apache.commons.collections15.bag.HashBag;
-import org.apache.commons.collections15.functors.InstantiateFactory;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.Bag;
+import org.apache.commons.collections4.bag.HashBag;
+import org.apache.commons.collections4.functors.InstantiateFactory;
+import org.apache.commons.collections4.map.LazyMap;
 
 /**
  * The {@code Mappings} represent a set of {@link Mapping} elements.
@@ -49,14 +49,14 @@ public class Mappings<T extends Task, R extends Resource> implements Iterable<Ma
 
 	protected Set<Mapping<T, R>> mappings = new HashSet<Mapping<T, R>>();
 
-	protected Map<T, Set<Mapping<T, R>>> taskMappings = LazyMap.decorate(new HashMap<T, Set<Mapping<T, R>>>(),
+	protected Map<T, Set<Mapping<T, R>>> taskMappings = LazyMap.lazyMap(new HashMap<T, Set<Mapping<T, R>>>(),
 			new InstantiateFactory(HashSet.class));
-	protected Map<R, Set<Mapping<T, R>>> resourceMappings = LazyMap.decorate(new HashMap<R, Set<Mapping<T, R>>>(),
+	protected Map<R, Set<Mapping<T, R>>> resourceMappings = LazyMap.lazyMap(new HashMap<R, Set<Mapping<T, R>>>(),
 			new InstantiateFactory(HashSet.class));
 	protected Map<T, Bag<R>> targets = LazyMap
-			.decorate(new HashMap<T, Bag<R>>(), new InstantiateFactory(HashBag.class));
+			.lazyMap(new HashMap<T, Bag<R>>(), new InstantiateFactory(HashBag.class));
 	protected Map<R, Bag<T>> sources = LazyMap
-			.decorate(new HashMap<R, Bag<T>>(), new InstantiateFactory(HashBag.class));
+			.lazyMap(new HashMap<R, Bag<T>>(), new InstantiateFactory(HashBag.class));
 
 	/**
 	 * Adds a mapping.

@@ -26,7 +26,7 @@ import java.util.Set;
 
 import net.sf.opendse.model.Specification;
 
-import org.apache.commons.collections15.Predicate;
+import org.apache.commons.collections4.Predicate;
 
 public class TimingGraphModifierFilterVertex implements TimingGraphModifier {
 

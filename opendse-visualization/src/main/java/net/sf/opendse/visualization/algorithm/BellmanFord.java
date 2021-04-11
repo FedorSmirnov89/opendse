@@ -26,10 +26,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.functors.ConstantFactory;
-import org.apache.commons.collections15.functors.MapTransformer;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.functors.ConstantFactory;
+import org.apache.commons.collections4.functors.MapTransformer;
+import org.apache.commons.collections4.map.LazyMap;
 
 import edu.uci.ics.jung.graph.Graph;
 
@@ -79,7 +79,7 @@ public class BellmanFord<V, E> implements Transformer<Graph<V, E>, Transformer<V
 	public Transformer<V, Double> transform(Graph<V, E> graph) {
 
 		Set<V> visited = new HashSet<V>();
-		Map<V, Double> result = LazyMap.decorate(new HashMap<V, Double>(), new ConstantFactory<Double>(0d));
+		Map<V, Double> result = LazyMap.lazyMap(new HashMap<V, Double>(), new ConstantFactory<Double>(0d));
 
 		for (V vertex : graph.getVertices()) {
 			if (graph.getPredecessorCount(vertex) == 0) {
@@ -101,7 +101,7 @@ public class BellmanFord<V, E> implements Transformer<Graph<V, E>, Transformer<V
 			visited = next;
 		}
 
-		return MapTransformer.getInstance(result);
+		return MapTransformer.mapTransformer(result);
 	}
 
 }

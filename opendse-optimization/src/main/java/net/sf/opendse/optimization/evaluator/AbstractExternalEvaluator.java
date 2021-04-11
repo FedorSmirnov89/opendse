@@ -38,6 +38,7 @@ import net.sf.opendse.io.Common;
 import net.sf.opendse.io.SpecificationReader;
 import net.sf.opendse.model.Specification;
 import net.sf.opendse.optimization.ImplementationEvaluator;
+import nu.xom.Element;
 
 import org.opt4j.core.Objective;
 
@@ -151,7 +152,7 @@ public abstract class AbstractExternalEvaluator implements ImplementationEvaluat
 			 * serializer.write(doc); serializer.flush();
 			 */
 
-			nu.xom.Element eResult = doc.getRootElement();
+			Element eResult = doc.getRootElement();
 			ResultElement resultElement = getResultElement(eResult);
 
 			return resultElement;
@@ -163,13 +164,13 @@ public abstract class AbstractExternalEvaluator implements ImplementationEvaluat
 		return null;
 	}
 
-	protected ResultElement getResultElement(nu.xom.Element eResult) throws IOException {
-		nu.xom.Element eObjectives = eResult.getFirstChildElement("objectives");
+	protected ResultElement getResultElement(Element eResult) throws IOException {
+		Element eObjectives = eResult.getFirstChildElement("objectives");
 
 		Collection<ObjectiveElement> objectiveElements = (eObjectives != null) ? getObjectiveElements(eObjectives)
 				: new ArrayList<ObjectiveElement>();
 
-		nu.xom.Element eSpecification = eResult.getFirstChildElement("specification");
+		Element eSpecification = eResult.getFirstChildElement("specification");
 
 		Specification spec = null;
 		if (eSpecification != null) {
@@ -180,17 +181,17 @@ public abstract class AbstractExternalEvaluator implements ImplementationEvaluat
 		return new ResultElement(objectiveElements, spec);
 	}
 
-	protected Collection<ObjectiveElement> getObjectiveElements(nu.xom.Element eObjectives) {
+	protected Collection<ObjectiveElement> getObjectiveElements(Element eObjectives) {
 		List<ObjectiveElement> objectiveElements = new ArrayList<ExternalEvaluatorStream.ObjectiveElement>();
 
-		for (nu.xom.Element eObjective : Common.iterable(eObjectives.getChildElements("objective"))) {
+		for (Element eObjective : Common.iterable(eObjectives.getChildElements("objective"))) {
 			objectiveElements.add(getObjectiveElement(eObjective));
 		}
 
 		return objectiveElements;
 	}
 
-	protected ObjectiveElement getObjectiveElement(nu.xom.Element eObjective) {
+	protected ObjectiveElement getObjectiveElement(Element eObjective) {
 		Objective.Sign sign = null;
 		String name = null;
 		double value = 0.0;

@@ -41,7 +41,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.awt.geom.QuadCurve2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,10 +61,11 @@ import net.sf.opendse.model.Edge;
 import net.sf.opendse.model.Graph;
 import net.sf.opendse.model.Node;
 
-import org.apache.commons.collections15.Bag;
-import org.apache.commons.collections15.Predicate;
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.bag.HashBag;
+import org.apache.commons.collections4.Bag;
+import org.apache.commons.collections4.bag.HashBag;
+
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
@@ -199,7 +199,7 @@ public class GraphPanel extends JPanel implements ElementSelectionListener {
 			// RenderingHints.VALUE_ANTIALIAS_OFF);
 
 			Shape symbol = format.getSymbol(node);
-			Paint drawPaint = rc.getVertexDrawPaintTransformer().transform(node);
+			Paint drawPaint = rc.getVertexDrawPaintTransformer().apply(node);
 
 			if (symbol != null && drawPaint != null) {
 				Paint tmpPaint = g.getPaint();
@@ -402,11 +402,11 @@ public class GraphPanel extends JPanel implements ElementSelectionListener {
 
 		RenderContext<Node, LocalEdge> ctx = vv.getRenderContext();
 
-		ctx.setVertexFillPaintTransformer(new Transformer<Node, Paint>() {
+		ctx.setVertexFillPaintTransformer(new Function<Node, Paint>() {
 			@Override
-			public Paint transform(Node node) {
+			public Paint apply(Node node) {
 				double size = format.getSize(node);
-				Point2D point = layout.transform(node);
+				Point2D point = layout.apply(node);
 				point = vv.getRenderContext().getMultiLayerTransformer().transform(Layer.LAYOUT, point);
 				Point2D p1 = new Point2D.Double(point.getX(), point.getY() - size / 2);
 				Point2D p2 = new Point2D.Double(point.getX(), point.getY() + size / 2);
@@ -414,28 +414,29 @@ public class GraphPanel extends JPanel implements ElementSelectionListener {
 				return gp;
 			}
 		});
-		ctx.setVertexDrawPaintTransformer(new Transformer<Node, Paint>() {
+		
+		ctx.setVertexDrawPaintTransformer(new Function<Node, Paint>() {
 			@Override
-			public Paint transform(Node node) {
+			public Paint apply(Node node) {
 				return tone(getColor(node), -4.5);
 			}
 		});
-		vv.setVertexToolTipTransformer(new Transformer<Node, String>() {
+		vv.setVertexToolTipTransformer(new Function<Node, String>() {
 			@Override
-			public String transform(Node node) {
+			public String apply(Node node) {
 				return format.getTooltip(node);
 			}
 		});
-		vv.setEdgeToolTipTransformer(new Transformer<LocalEdge, String>() {
+		vv.setEdgeToolTipTransformer(new Function<LocalEdge, String>() {
 			@Override
-			public String transform(LocalEdge edge) {
+			public String apply(LocalEdge edge) {
 				return format.getTooltip(edge.getEdge());
 			}
 		});
 
-		Transformer<LocalEdge, Paint> edgePaint = new Transformer<LocalEdge, Paint>() {
+		Function<LocalEdge, Paint> edgePaint = new Function<LocalEdge, Paint>() {
 			@Override
-			public Paint transform(LocalEdge edge) {
+			public Paint apply(LocalEdge edge) {
 				return getColor(edge.getEdge(), edge.getSource(), edge.getDest());
 			}
 		};
@@ -444,22 +445,22 @@ public class GraphPanel extends JPanel implements ElementSelectionListener {
 		ctx.setArrowFillPaintTransformer(edgePaint);
 
 		final Stroke THIN = new BasicStroke(1.0f);
-		ctx.setEdgeStrokeTransformer(new Transformer<LocalEdge, Stroke>() {
+		ctx.setEdgeStrokeTransformer(new Function<LocalEdge, Stroke>() {
 			@Override
-			public Stroke transform(LocalEdge edge) {
+			public Stroke apply(LocalEdge edge) {
 				return THIN;
 			}
 		});
-		ctx.setVertexStrokeTransformer(new Transformer<Node, Stroke>() {
+		ctx.setVertexStrokeTransformer(new Function<Node, Stroke>() {
 			@Override
-			public Stroke transform(Node node) {
+			public Stroke apply(Node node) {
 				return THIN;
 			}
 		});
 
-		ctx.setVertexShapeTransformer(new Transformer<Node, Shape>() {
+		ctx.setVertexShapeTransformer(new Function<Node, Shape>() {
 			@Override
-			public Shape transform(Node node) {
+			public Shape apply(Node node) {
 				return getShape(node);
 			}
 		});
@@ -505,60 +506,36 @@ public class GraphPanel extends JPanel implements ElementSelectionListener {
 			}
 		};
 
-		EdgeShape.QuadCurve<Node, LocalEdge> curve = new EdgeShape.QuadCurve<Node, LocalEdge>() {
-			private final QuadCurve2D instance = new QuadCurve2D.Float();
-
-			@Override
-			public Shape transform(Context<edu.uci.ics.jung.graph.Graph<Node, LocalEdge>, LocalEdge> context) {
-				parallelEdgeIndexFunction = edgeIndexFunction;
-
-				edu.uci.ics.jung.graph.Graph<Node, LocalEdge> graph = context.graph;
-				LocalEdge e = context.element;
-				Pair<Node> endpoints = graph.getEndpoints(e);
-				if (endpoints != null) {
-					boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
-					if (isLoop) {
-						return super.transform(context);
-					}
-				}
-
-				int index = 1;
-				if (parallelEdgeIndexFunction != null) {
-					index = parallelEdgeIndexFunction.getIndex(graph, e);
-				}
-
-				float controlY = control_offset_increment * index;
-
-				instance.setCurve(0.0f, 0.0f, 0.5f, controlY, 1.0f, 0.0f);
-				return instance;
-			}
-		};
+		EdgeShape<Node, LocalEdge>.QuadCurve curve = EdgeShape.quadCurve(this.localGraph);
+		
 		curve.setEdgeIndexFunction(edgeIndexFunction);
 
 		ctx.setEdgeShapeTransformer(curve);
 
-		ctx.setVertexLabelTransformer(new Transformer<Node, String>() {
+		ctx.setVertexLabelTransformer(new Function<Node, String>() {
 			@Override
-			public String transform(Node node) {
+			public String apply(Node node) {
 				return getLabel(node);
 			}
 		});
-		ctx.setEdgeLabelTransformer(new Transformer<LocalEdge, String>() {
+		ctx.setEdgeLabelTransformer(new Function<LocalEdge, String>() {
 			@Override
-			public String transform(LocalEdge edge) {
+			public String apply(LocalEdge edge) {
 				return getLabel(edge.getEdge());
 			}
 		});
+		
+				
 		ctx.setEdgeArrowPredicate(new Predicate<Context<edu.uci.ics.jung.graph.Graph<Node, LocalEdge>, LocalEdge>>() {
 			@Override
-			public boolean evaluate(Context<edu.uci.ics.jung.graph.Graph<Node, LocalEdge>, LocalEdge> ctx) {
+			public boolean apply(Context<edu.uci.ics.jung.graph.Graph<Node, LocalEdge>, LocalEdge> ctx) {
 				LocalEdge edge = ctx.element;
 				return isArrow(edge);
 			}
 		});
 		ctx.setEdgeIncludePredicate(new Predicate<Context<edu.uci.ics.jung.graph.Graph<Node, LocalEdge>, LocalEdge>>() {
 			@Override
-			public boolean evaluate(Context<edu.uci.ics.jung.graph.Graph<Node, LocalEdge>, LocalEdge> ctx) {
+			public boolean apply(Context<edu.uci.ics.jung.graph.Graph<Node, LocalEdge>, LocalEdge> ctx) {
 				LocalEdge edge = ctx.element;
 				return isVisible(edge);
 			}
@@ -574,9 +551,9 @@ public class GraphPanel extends JPanel implements ElementSelectionListener {
 				super.labelVertex(arg0, arg1, arg2, arg3);
 			}
 		});
-		ctx.setEdgeArrowTransformer(new Transformer<Context<edu.uci.ics.jung.graph.Graph<Node, LocalEdge>, LocalEdge>, Shape>() {
+		ctx.setEdgeArrowTransformer(new Function<Context<edu.uci.ics.jung.graph.Graph<Node, LocalEdge>, LocalEdge>, Shape>() {
 			@Override
-			public Shape transform(Context<edu.uci.ics.jung.graph.Graph<Node, LocalEdge>, LocalEdge> arg0) {
+			public Shape apply(Context<edu.uci.ics.jung.graph.Graph<Node, LocalEdge>, LocalEdge> arg0) {
 				return ArrowFactory.getWedgeArrow(8, 5);
 			}
 		});

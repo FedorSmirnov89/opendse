@@ -26,8 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections15.functors.InstantiateFactory;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.functors.InstantiateFactory;
+import org.apache.commons.collections4.map.LazyMap;
 
 /**
  * The {@code Routings} maps {@link Task} elements to a subgraph of the
@@ -46,7 +46,7 @@ import org.apache.commons.collections15.map.LazyMap;
 public class Routings<T extends Task, R extends Resource, L extends Link> {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected Map<T, Architecture<R, L>> map = LazyMap.decorate(new HashMap<T, Architecture<R, L>>(),
+	protected Map<T, Architecture<R, L>> map = LazyMap.lazyMap(new HashMap<T, Architecture<R, L>>(),
 			new InstantiateFactory(Architecture.class));
 
 	/**

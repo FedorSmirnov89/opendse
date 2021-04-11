@@ -28,8 +28,8 @@ import java.util.Map;
 
 import net.sf.opendse.model.parameter.ParameterReference;
 
-import org.apache.commons.collections15.functors.InstantiateFactory;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.functors.InstantiateFactory;
+import org.apache.commons.collections4.map.LazyMap;
 
 @SuppressWarnings("unchecked")
 public class ParameterMap extends HashMap<ParameterReference, Object> {
@@ -37,7 +37,7 @@ public class ParameterMap extends HashMap<ParameterReference, Object> {
 	private static final long serialVersionUID = 1L;
 	
 	@SuppressWarnings("rawtypes")
-	protected Map<String, List<ParameterReference>> map = LazyMap.decorate(
+	protected Map<String, List<ParameterReference>> map = LazyMap.lazyMap(
 			new HashMap<String, List<ParameterReference>>(), new InstantiateFactory(ArrayList.class));
 
 	@Override

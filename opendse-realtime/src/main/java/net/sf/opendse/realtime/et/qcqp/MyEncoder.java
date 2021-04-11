@@ -44,7 +44,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.jmpi.main.MpConstraint;
 import net.sf.jmpi.main.MpDirection;
 import net.sf.jmpi.main.MpProblem;
 import net.sf.jmpi.main.expression.MpExpr;
@@ -56,9 +55,7 @@ import net.sf.opendse.realtime.et.graph.TimingDependencyPriority;
 import net.sf.opendse.realtime.et.graph.TimingDependencyTrigger;
 import net.sf.opendse.realtime.et.graph.TimingElement;
 import net.sf.opendse.realtime.et.graph.TimingGraph;
-import net.sf.opendse.realtime.et.qcqp.vars.Vars;
-
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 public class MyEncoder {
 

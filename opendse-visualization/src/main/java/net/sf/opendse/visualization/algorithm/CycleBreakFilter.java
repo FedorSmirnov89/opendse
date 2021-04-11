@@ -24,7 +24,7 @@ package net.sf.opendse.visualization.algorithm;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 import edu.uci.ics.jung.algorithms.filters.FilterUtils;
 import edu.uci.ics.jung.graph.DirectedGraph;

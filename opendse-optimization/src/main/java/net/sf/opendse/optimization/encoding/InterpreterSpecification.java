@@ -183,7 +183,7 @@ public class InterpreterSpecification implements Interpreter {
 			// System.out.println(sRouting+" "+iRouting);
 
 			WeakComponentClusterer<Resource, Link> clusterer = new WeakComponentClusterer<Resource, Link>();
-			Set<Set<Resource>> cluster = clusterer.transform(iRouting);
+			Set<Set<Resource>> cluster = clusterer.apply(iRouting);
 
 			Task sender = iApplication.getPredecessors(c).iterator().next();
 

@@ -32,8 +32,8 @@ import java.util.Set;
 
 import net.sf.opendse.visualization.algorithm.BellmanFord;
 
-import org.apache.commons.collections15.Predicate;
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Predicate;
+import org.apache.commons.collections4.Transformer;
 
 public class ApplicationPriorityCyclesPredicate implements Predicate<TimingDependency> {
 

@@ -5,6 +5,13 @@ dependencies {
 	
 	implementation 'com.github.FedorSmirnov89:opt4j:-SNAPSHOT'
 	
-	testCompile 'junit:junit:4.12'
-	testCompile group: 'org.mockito', name: 'mockito-core', version: '2.22.0'
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
+	implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
+	
+	// https://mvnrepository.com/artifact/com.io7m.xom/xom
+	implementation group: 'com.io7m.xom', name: 'xom', version: '1.2.10'
+	
+	
+	testCompile 'junit:junit:4.13.2'
+	testCompile group: 'org.mockito', name: 'mockito-core', version: '3.9.0'
 }

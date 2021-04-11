@@ -25,7 +25,7 @@ import static net.sf.opendse.realtime.et.PriorityScheduler.FIXEDPRIORITY_NONPREE
 import static net.sf.opendse.realtime.et.PriorityScheduler.FIXEDPRIORITY_PREEMPTIVE;
 import net.sf.opendse.model.Resource;
 
-import org.apache.commons.collections15.Predicate;
+import org.apache.commons.collections4.Predicate;
 
 public class DelaySchedulerEdgePredicate implements Predicate<TimingDependency> {
 

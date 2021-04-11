@@ -21,7 +21,7 @@
  *******************************************************************************/
 package net.sf.opendse.model;
 
-import org.apache.commons.collections15.Predicate;
+import org.apache.commons.collections4.Predicate;
 
 /**
  * The {@code ValidImplementationPredicate} is a {@code Predicate} that returns

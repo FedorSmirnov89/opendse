@@ -42,7 +42,7 @@ import net.sf.opendse.model.ValidImplementationPredicate;
 import net.sf.opendse.realtime.et.PriorityScheduler;
 import net.sf.opendse.visualization.algorithm.BellmanFord;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
 
 import edu.uci.ics.jung.graph.util.EdgeType;
 

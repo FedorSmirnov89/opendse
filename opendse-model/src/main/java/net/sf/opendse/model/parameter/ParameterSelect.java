@@ -21,9 +21,9 @@
  *******************************************************************************/
 package net.sf.opendse.model.parameter;
 
+import java.util.Arrays;
 import java.util.List;
 
-import cern.colt.Arrays;
 
 /**
  * The {@code ParameterSelect} is a parameter that selects from a set of

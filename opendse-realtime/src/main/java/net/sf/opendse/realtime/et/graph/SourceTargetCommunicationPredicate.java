@@ -29,7 +29,7 @@ import net.sf.opendse.model.Routings;
 import net.sf.opendse.model.Specification;
 import net.sf.opendse.model.Task;
 
-import org.apache.commons.collections15.Predicate;
+import org.apache.commons.collections4.Predicate;
 
 public class SourceTargetCommunicationPredicate implements Predicate<TimingElement> {
 

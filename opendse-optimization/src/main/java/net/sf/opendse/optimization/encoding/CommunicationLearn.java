@@ -34,8 +34,8 @@ import net.sf.opendse.model.ICommunication;
 import net.sf.opendse.optimization.encoding.common.BinaryReachability;
 import net.sf.opendse.optimization.encoding.variables.CommunicationVariable;
 
-import org.apache.commons.collections15.functors.InstantiateFactory;
-import org.apache.commons.collections15.map.LazyMap;
+import org.apache.commons.collections4.functors.InstantiateFactory;
+import org.apache.commons.collections4.map.LazyMap;
 import org.opt4j.satdecoding.Constraint;
 import org.opt4j.satdecoding.Literal;
 
@@ -53,10 +53,10 @@ public class CommunicationLearn {
 	public Set<Literal> learn(Collection<Constraint> constraints) {
 		Set<Literal> learned = new HashSet<Literal>();
 
-		Map<Object, Set<Constraint>> map = LazyMap.decorate(new HashMap<Object, Set<Constraint>>(),
+		Map<Object, Set<Constraint>> map = LazyMap.lazyMap(new HashMap<Object, Set<Constraint>>(),
 				new InstantiateFactory(HashSet.class));
 
-		Map<ICommunication, Set<CommunicationVariable>> cvars = LazyMap.decorate(
+		Map<ICommunication, Set<CommunicationVariable>> cvars = LazyMap.lazyMap(
 				new HashMap<ICommunication, Set<CommunicationVariable>>(), new InstantiateFactory(HashSet.class));
 
 		for (Constraint constraint : constraints) {

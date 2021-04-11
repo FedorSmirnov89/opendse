@@ -33,7 +33,9 @@ import net.sf.opendse.realtime.et.graph.TimingGraph;
 import net.sf.opendse.visualization.Graphics;
 import net.sf.opendse.visualization.algorithm.DistanceFlowLayout;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections4.Transformer;
+
+import com.google.common.base.Function;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
@@ -46,52 +48,52 @@ import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 public class TimingGraphViewer {
 
 	public static void view(TimingGraph tg) {
-		
-		/*TimingGraph tgFilter = FilterUtils.createInducedSubgraph(tg.getVertices(), tg);
-		for(TimingDependency td: tg.getEdges()){
-			if(td instanceof TimingDependencyPriority){
-				tgFilter.removeEdge(td);
-			}
-		}*/
-		
+
+		/*
+		 * TimingGraph tgFilter = FilterUtils.createInducedSubgraph(tg.getVertices(),
+		 * tg); for(TimingDependency td: tg.getEdges()){ if(td instanceof
+		 * TimingDependencyPriority){ tgFilter.removeEdge(td); } }
+		 */
+
 		Layout<TimingElement, TimingDependency> layout = new DistanceFlowLayout<TimingElement, TimingDependency>(tg);
 
-		VisualizationModel<TimingElement, TimingDependency> vm = new DefaultVisualizationModel<TimingElement, TimingDependency>(layout,
-				new Dimension(800, 600));
-		VisualizationViewer<TimingElement, TimingDependency> vv = new VisualizationViewer<TimingElement, TimingDependency>(vm);
+		VisualizationModel<TimingElement, TimingDependency> vm = new DefaultVisualizationModel<TimingElement, TimingDependency>(
+				layout, new Dimension(800, 600));
+		VisualizationViewer<TimingElement, TimingDependency> vv = new VisualizationViewer<TimingElement, TimingDependency>(
+				vm);
 
 		DefaultModalGraphMouse<TimingElement, TimingDependency> graphMouse = new DefaultModalGraphMouse<TimingElement, TimingDependency>();
 		vv.setGraphMouse(graphMouse);
 
 		RenderContext<TimingElement, TimingDependency> ctx = vv.getRenderContext();
 
-		ctx.setVertexLabelTransformer(new Transformer<TimingElement, String>() {
-			public String transform(TimingElement timingEntity) {
+		ctx.setVertexLabelTransformer(new Function<TimingElement, String>() {
+			public String apply(TimingElement timingEntity) {
 				return timingEntity.toString();
 			}
 		});
 
-		ctx.setVertexFillPaintTransformer(new Transformer<TimingElement, Paint>() {
+		ctx.setVertexFillPaintTransformer(new Function<TimingElement, Paint>() {
 			@Override
-			public Paint transform(TimingElement entity) {
-				//if (entity.isCommunication()) {
-					return Graphics.ALICEBLUE;
-				//} else {
-				//	return Graphics.ROSYBROWN;
-				//}
+			public Paint apply(TimingElement entity) {
+				// if (entity.isCommunication()) {
+				return Graphics.ALICEBLUE;
+				// } else {
+				// return Graphics.ROSYBROWN;
+				// }
 			}
 		});
-		
-		ctx.setEdgeDrawPaintTransformer(new Transformer<TimingDependency, Paint>() {
+
+		ctx.setEdgeDrawPaintTransformer(new Function<TimingDependency, Paint>() {
 			@Override
-			public Paint transform(TimingDependency td) {
-				if(td instanceof TimingDependencyTrigger){
+			public Paint apply(TimingDependency td) {
+				if (td instanceof TimingDependencyTrigger) {
 					return Graphics.BLACK;
 				} else {
 					return Graphics.BLUE;
 				}
 			}
-			
+
 		});
 
 		final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
