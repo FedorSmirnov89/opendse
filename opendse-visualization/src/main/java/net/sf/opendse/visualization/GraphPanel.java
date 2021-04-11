@@ -506,10 +506,7 @@ public class GraphPanel extends JPanel implements ElementSelectionListener {
 			}
 		};
 
-		EdgeShape<Node, LocalEdge>.QuadCurve curve = EdgeShape.quadCurve(this.localGraph);
-		
-		curve.setEdgeIndexFunction(edgeIndexFunction);
-
+		EdgeShape<Node, LocalEdge>.Line curve = EdgeShape.line(this.localGraph);
 		ctx.setEdgeShapeTransformer(curve);
 
 		ctx.setVertexLabelTransformer(new Function<Node, String>() {
