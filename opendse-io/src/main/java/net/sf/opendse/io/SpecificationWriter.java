@@ -387,7 +387,7 @@ public class SpecificationWriter {
 				eAttr.appendChild(((Enum) attribute).name());
 			} else if (attribute instanceof Serializable) {
 				Serializable s = (Serializable) attribute;
-				eAttr.addAttribute(new nu.xom.Attribute("type", s.getClass().getName()));
+				eAttr.addAttribute(new nu.xom.Attribute("type", attribute.getClass().getName()));
 				try {
 					eAttr.appendChild(Common.toString(s));
 				} catch (IOException e) {
