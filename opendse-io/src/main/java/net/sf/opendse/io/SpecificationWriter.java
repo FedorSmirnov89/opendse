@@ -75,8 +75,7 @@ public class SpecificationWriter {
 	/**
 	 * Constructs a new {@link SpecificationWriter} instance.
 	 *
-	 * @param writeRoutings
-	 *            true if the routings shall be exported
+	 * @param writeRoutings true if the routings shall be exported
 	 */
 	public SpecificationWriter(boolean writeRoutings) {
 		this.writeRoutings = writeRoutings;
@@ -85,10 +84,8 @@ public class SpecificationWriter {
 	/**
 	 * Write the specification to a file.
 	 *
-	 * @param specification
-	 *            the specification
-	 * @param filename
-	 *            the name of the target file
+	 * @param specification the specification
+	 * @param filename      the name of the target file
 	 */
 	public void write(Specification specification, String filename) {
 		write(specification, new File(filename));
@@ -97,10 +94,8 @@ public class SpecificationWriter {
 	/**
 	 * Write the specification to a file.
 	 *
-	 * @param specification
-	 *            the specification
-	 * @param file
-	 *            the file
+	 * @param specification the specification
+	 * @param file          the file
 	 */
 	public void write(Specification specification, File file) {
 		try {
@@ -118,10 +113,8 @@ public class SpecificationWriter {
 	/**
 	 * Write the specification to an output stream.
 	 *
-	 * @param specification
-	 *            the specification
-	 * @param out
-	 *            the output stream
+	 * @param specification the specification
+	 * @param out           the output stream
 	 */
 	public void write(Specification specification, OutputStream out) {
 
@@ -146,10 +139,8 @@ public class SpecificationWriter {
 	/**
 	 * Write a collection of specifications to an output stream.
 	 *
-	 * @param specifications
-	 *            the specifications
-	 * @param out
-	 *            the output stream
+	 * @param specifications the specifications
+	 * @param out            the output stream
 	 */
 	public void write(Collection<Specification> specifications, OutputStream out) {
 
@@ -176,8 +167,7 @@ public class SpecificationWriter {
 	/**
 	 * Transform a specification to an XML element.
 	 *
-	 * @param specification
-	 *            the specification
+	 * @param specification the specification
 	 * @return the XML element
 	 */
 	public nu.xom.Element toElement(Specification specification) {
@@ -210,7 +200,8 @@ public class SpecificationWriter {
 		return eRoutings;
 	}
 
-	protected nu.xom.Element toElement(Architecture<Resource, Link> routing, Architecture<Resource, Link> architecture) {
+	protected nu.xom.Element toElement(Architecture<Resource, Link> routing,
+			Architecture<Resource, Link> architecture) {
 		nu.xom.Element eArch = new nu.xom.Element("routing", NS);
 
 		for (Resource resource : routing) {
@@ -322,7 +313,8 @@ public class SpecificationWriter {
 		return eElem;
 	}
 
-	protected nu.xom.Element toElement(Edge edge, String name, Node source, Node dest, EdgeType edgeType, boolean local) {
+	protected nu.xom.Element toElement(Edge edge, String name, Node source, Node dest, EdgeType edgeType,
+			boolean local) {
 		nu.xom.Element eElem = new nu.xom.Element(name, NS);
 		eElem.addAttribute(new nu.xom.Attribute("id", edge.getId()));
 		if (!getType(edge.getClass()).equals(name)) {
@@ -386,13 +378,8 @@ public class SpecificationWriter {
 				eAttr.addAttribute(new nu.xom.Attribute("type", getType(cls)));
 				eAttr.appendChild(((Enum) attribute).name());
 			} else if (attribute instanceof Serializable) {
-				Serializable s = (Serializable) attribute;
 				eAttr.addAttribute(new nu.xom.Attribute("type", attribute.getClass().getName()));
-				try {
-					eAttr.appendChild(Common.toString(s));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				eAttr.appendChild(attribute.toString());
 
 			} else {
 				System.err.println("Failed to write attribute " + attribute);
